@@ -1,0 +1,28 @@
+{
+  "schemaVersion": 1,
+  "id": "projcam",
+  "version": "${version}",
+  "name": "ProjCam",
+  "description": "",
+  "authors": [],
+  "contact": {},
+  "license": "All-Rights-Reserved",
+  "icon": "assets/projcam/icon.png",
+  "environment": "client",
+  "entrypoints": {
+    "client": [
+      "com.h1ggsk.projcam.client.ProjcamClient"
+    ],
+    "main": [
+      "com.h1ggsk.projcam.Projcam"
+    ]
+  },
+  "mixins": [
+    "projcam.mixins.json"
+  ],
+  "depends": {
+    "fabricloader": ">=${loader_version}",
+    "fabric-api": "*",
+    "minecraft": "${minecraft_version}"
+  }
+}

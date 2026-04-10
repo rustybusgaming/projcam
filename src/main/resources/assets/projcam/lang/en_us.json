@@ -1,0 +1,6 @@
+{
+  "projcam.midnightconfig.title": "ProjCam",
+  "projcam.midnightconfig.category.general": "General",
+  "projcam.midnightconfig.followProjectiles": "Enable projectile following",
+  "projcam.midnightconfig.followProjectiles.tooltip": "Turns the projectile follow camera on or off."
+}
