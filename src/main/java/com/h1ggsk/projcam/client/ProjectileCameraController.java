@@ -60,7 +60,7 @@ public final class ProjectileCameraController {
 
         collidedProjectileIds.add(projectile.getId());
         if (trackedProjectileId != null && trackedProjectileId == projectile.getId()) {
-            detachFromCurrentProjectiles(client);
+            resetCamera(client);
         }
     }
 
