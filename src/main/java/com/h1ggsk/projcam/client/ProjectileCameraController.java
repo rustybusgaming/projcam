@@ -15,6 +15,7 @@ public final class ProjectileCameraController {
     private static final Set<Integer> collidedProjectileIds = new HashSet<>();
     private static final Set<Integer> ignoredProjectileIds = new HashSet<>();
     private static Vec3d playerAnchorPos;
+    private static int trackingGraceTicks;
 
     private ProjectileCameraController() {
     }
@@ -54,7 +55,7 @@ public final class ProjectileCameraController {
             return;
         }
 
-        if (!(entity instanceof ProjectileEntity projectile) || projectile.getOwner() != client.player) {
+        if (!(entity instanceof ProjectileEntity projectile) || !client.player.equals(projectile.getOwner())) {
             return;
         }
 
@@ -101,7 +102,7 @@ public final class ProjectileCameraController {
                 continue;
             }
 
-            if (projectile.isRemoved() || projectile.getOwner() != client.player) {
+            if (projectile.isRemoved() || !client.player.equals(projectile.getOwner())) {
                 continue;
             }
 
@@ -132,7 +133,8 @@ public final class ProjectileCameraController {
     private static void beginTracking(MinecraftClient client, ProjectileEntity projectile) {
         if (trackedProjectileId == null || trackedProjectileId != projectile.getId()) {
             trackedProjectileId = projectile.getId();
-            playerAnchorPos = client.player.getEntityPos();
+            playerAnchorPos = null;
+            trackingGraceTicks = 5;
         }
     }
 
@@ -154,7 +156,12 @@ public final class ProjectileCameraController {
     }
 
     private static boolean shouldDetach(MinecraftClient client, ProjectileEntity projectile) {
-        if (playerAnchorPos != null && client.player.getEntityPos().squaredDistanceTo(playerAnchorPos) > 1.0E-6) {
+        if (trackingGraceTicks > 0) {
+            trackingGraceTicks--;
+            if (trackingGraceTicks == 0) {
+                playerAnchorPos = client.player.getEntityPos();
+            }
+        } else if (playerAnchorPos != null && client.player.getEntityPos().squaredDistanceTo(playerAnchorPos) > 1.0E-6) {
             return true;
         }
 
@@ -180,7 +187,7 @@ public final class ProjectileCameraController {
         for (Entity entity : client.world.getEntities()) {
             if (entity instanceof ProjectileEntity projectile
                     && !projectile.isRemoved()
-                    && projectile.getOwner() == client.player) {
+                    && client.player.equals(projectile.getOwner())) {
                 ignoredProjectileIds.add(projectile.getId());
             }
         }
